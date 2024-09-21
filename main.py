@@ -49,8 +49,7 @@ def print_test_subjects(test_subjects):
 
 def main():
     test_subjects = []
-    choice = "z"
-    while choice != "q":
+    while True:
         print_menu()
         choice = input("Your choice: ")
         if choice == "a":
@@ -64,6 +63,8 @@ def main():
         elif choice == "w":
             filename = input("Filename: ")
             write_data(test_subjects, filename)
+        elif choice == "q":
+            break
 
 
 if __name__ == "__main__":
