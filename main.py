@@ -1,5 +1,6 @@
 from fileinput import filename
 
+
 def print_menu():
     print("--------- Menu ----------")
     print("a) Add a new test subject")
@@ -10,29 +11,35 @@ def print_menu():
     print("-------------------------\n")
 
 def new_test_subject():
-    print("---- New test subject ----")
+    print("\n---- New test subject ----")
     new_subject_number = input("Number: ")
     new_subject_time = int(input("Time: "))
-    new_subject = (new_subject_number, new_subject_time)
-    return new_subject
+    return new_subject_number, new_subject_time
 
 def write_data(test_subjects, filename):
-
     with open(filename, "w") as file:
-        for i in test_subjects:
-            i = str(i)
-            file.write(f"{i[0]}\n{i[1]}\n")
+        for test_subjects in test_subjects:
+            file.write(test_subjects[0] + "\n")
+            file.write(str(test_subjects[1]) + "\n")
+    print("*** Data written to file ***")
 
 
 def read_data(filename):
+    test_subjects = []
     with open(filename, "r") as file:
-        return file.read()
+        lines = file.readlines()
+        for i in range(0, len(lines), 2):
+            test_subject_number = lines[i].strip() #Remove newline character
+            test_subject_time = int(lines[i+1].strip())
+            test_subjects.append((test_subject_number, test_subject_time))
+    print("*** Data read from file ***")
+    return test_subjects
 
 def print_test_subjects(test_subjects):
-    print("---- Registered test subjects ----")
-    for i in test_subjects:
-        print(f"Number : {test_subjects[0]:>5}")
-        print(f"Time   : {test_subjects[1]:>5}\n")
+    print("\n---- Registered test subjects ----")
+    for subject_number, subject_time in test_subjects:
+        print(f"Number : {subject_number:>5}")
+        print(f"Time   : {subject_time:>5}\n")
 
 
 def main():
@@ -42,15 +49,16 @@ def main():
         print_menu()
         choice = input("Your choice: ")
         if choice == "a":
-            test_subjects = new_test_subject()
+            test_subjects.append(new_test_subject())
         elif choice == "s":
             print_test_subjects(test_subjects)
         elif choice == "r":
+            filename = input("Filename: ")
             test_subjects = read_data(filename)
+            print_test_subjects(test_subjects)
         elif choice == "w":
-            write_data(test_subjects, "filename.txt")
-        elif choice == "q":
-            print("Goodbye!")
+            filename = input("Filename: ")
+            write_data(test_subjects, filename)
 
 
 if __name__ == "__main__":
